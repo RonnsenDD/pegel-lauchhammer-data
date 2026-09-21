@@ -16,11 +16,17 @@ jobs:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
-      - name: Pegeldaten herunterladen
+            - name: Download-Aufruf des Pegelportals untersuchen
         run: |
           curl -L --fail --silent --show-error \
-            "https://pegelportal.brandenburg.de/source/download/5530401_wasserstand.csv" \
-            -o pegel.csv
+            "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph" \
+            -o pegelseite.html
+
+          echo "===== Download-/Formular-Struktur ====="
+          grep -in -B 15 -A 35 "24 Stunden" pegelseite.html || true
+
+          echo "===== CSV-/Download-Verweise ====="
+          grep -oiE '.{0,120}(csv|download).{0,180}' pegelseite.html | head -50 || true
 
       - name: Pegeldaten auswerten
         shell: python
