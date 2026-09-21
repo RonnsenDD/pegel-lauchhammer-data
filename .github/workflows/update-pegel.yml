@@ -42,7 +42,7 @@ jobs:
 
           rows = []
 
-          with csv_file.open("r", encoding="utf-8-sig", newline="") as f:
+          with csv_file.open("r", encoding="cp1252", newline="") as f:
               reader = csv.reader(f, delimiter=";")
 
               header = next(reader)
