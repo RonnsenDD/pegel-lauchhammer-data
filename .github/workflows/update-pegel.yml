@@ -6,23 +6,164 @@ on:
     - cron: "*/15 * * * *"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  diagnose-pegel:
+  update-pegel:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pegelportal abrufen
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: 24-Stunden-Pegeldaten herunterladen
         run: |
           curl -L --fail --silent --show-error \
+            -X POST \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            --data "smode=c&sdatum=stunde" \
             "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph" \
-            -o pegelseite.html
+            -o pegel.csv
 
-      - name: Download-Struktur untersuchen
+          echo "===== Download geprüft ====="
+          file pegel.csv
+          echo "===== Erste Zeilen ====="
+          head -5 pegel.csv
+
+      - name: Pegeldaten auswerten
+        shell: python
         run: |
-          echo "===== 24-STUNDEN-BEREICH ====="
-          grep -in -B 15 -A 35 "24 Stunden" pegelseite.html || true
+          import csv
+          import json
+          from datetime import datetime
+          from pathlib import Path
 
-          echo "===== CSV / DOWNLOAD ====="
-          grep -oiE '.{0,150}(csv|download).{0,200}' pegelseite.html | head -80 || true
+          csv_file = Path("pegel.csv")
+
+          rows = []
+
+          with csv_file.open("r", encoding="utf-8-sig", newline="") as f:
+              reader = csv.reader(f, delimiter=";")
+
+              header = next(reader)
+
+              for row in reader:
+                  if len(row) < 2:
+                      continue
+
+                  timestamp = row[0].strip().strip('"')
+                  value = row[1].strip().strip('"')
+
+                  if not timestamp or not value:
+                      continue
+
+                  try:
+                      water_level = float(value)
+                  except ValueError:
+                      continue
+
+                  # -777 = Fehlwert laut LfU Brandenburg
+                  if water_level == -777:
+                      continue
+
+                  try:
+                      dt = datetime.strptime(
+                          timestamp,
+                          "%d.%m.%Y %H:%M"
+                      )
+                  except ValueError:
+                      continue
+
+                  rows.append({
+                      "dt": dt,
+                      "measuredAt": dt.strftime(
+                          "%Y-%m-%dT%H:%M:%S"
+                      ),
+                      "waterLevelCm": water_level
+                  })
+
+          if not rows:
+              raise RuntimeError(
+                  "Keine gültigen Pegeldaten gefunden."
+              )
+
+          rows.sort(key=lambda x: x["dt"])
+
+          # Der 24-Stunden-Download sollte bereits nur
+          # den gewünschten Zeitraum enthalten.
+          current = rows[-1]
+
+          # Letzte 24 Stunden inklusive aktuellem Messwert:
+          history = rows[-97:]
+
+          # Tendenz aus den letzten beiden gültigen Messwerten
+          if len(rows) >= 2:
+              previous = rows[-2]["waterLevelCm"]
+
+              if current["waterLevelCm"] > previous:
+                  trend = "steigend"
+              elif current["waterLevelCm"] < previous:
+                  trend = "fallend"
+              else:
+                  trend = "gleichbleibend"
+          else:
+              trend = "unbekannt"
+
+          data = {
+              "station": "Lauchhammer",
+              "stationNumber": "5530401",
+              "river": "Schwarze Elster",
+
+              "current": {
+                  "waterLevelCm": current["waterLevelCm"],
+                  "measuredAt": current["measuredAt"]
+              },
+
+              "trend": trend,
+
+              "history": [
+                  {
+                      "measuredAt": item["measuredAt"],
+                      "waterLevelCm": item["waterLevelCm"]
+                  }
+                  for item in history
+              ],
+
+              "source": {
+                  "provider": "LfU Brandenburg",
+                  "url": "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"
+              },
+
+              "status": "ok"
+          }
+
+          Path("pegel.json").write_text(
+              json.dumps(
+                  data,
+                  ensure_ascii=False,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+          print("===== Aktueller Pegel =====")
+          print(
+              current["measuredAt"],
+              current["waterLevelCm"],
+              "cm"
+          )
+
+      - name: Änderungen speichern
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add pegel.json
+
+          if git diff --cached --quiet; then
+            echo "Keine Änderung."
+            exit 0
+          fi
+
+          git commit -m "Aktualisiere Pegeldaten"
+          git push
