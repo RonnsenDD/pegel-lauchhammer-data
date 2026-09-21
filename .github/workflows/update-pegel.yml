@@ -29,6 +29,8 @@ jobs:
           file pegel.csv
           echo "===== Erste Zeilen ====="
           head -5 pegel.csv
+          echo "===== LETZTE ZEILEN ====="
+          tail -20 pegel.csv
 
       - name: Pegeldaten auswerten
         shell: python
