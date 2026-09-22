@@ -9,14 +9,6 @@
   "trend": "fallend",
   "history": [
     {
-      "measuredAt": "2026-09-21T17:15:00",
-      "waterLevelCm": 66.0
-    },
-    {
-      "measuredAt": "2026-09-21T17:30:00",
-      "waterLevelCm": 66.0
-    },
-    {
       "measuredAt": "2026-09-21T17:45:00",
       "waterLevelCm": 66.0
     },
