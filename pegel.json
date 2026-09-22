@@ -3,15 +3,11 @@
   "stationNumber": "5530401",
   "river": "Schwarze Elster",
   "current": {
-    "waterLevelCm": 64.0,
-    "measuredAt": "2026-09-22T22:00:00"
+    "waterLevelCm": 63.0,
+    "measuredAt": "2026-09-22T23:00:00"
   },
   "trend": "gleichbleibend",
   "history": [
-    {
-      "measuredAt": "2026-09-21T23:15:00",
-      "waterLevelCm": 66.0
-    },
     {
       "measuredAt": "2026-09-21T23:30:00",
       "waterLevelCm": 66.0
@@ -375,6 +371,22 @@
     {
       "measuredAt": "2026-09-22T22:00:00",
       "waterLevelCm": 64.0
+    },
+    {
+      "measuredAt": "2026-09-22T22:15:00",
+      "waterLevelCm": 64.0
+    },
+    {
+      "measuredAt": "2026-09-22T22:30:00",
+      "waterLevelCm": 64.0
+    },
+    {
+      "measuredAt": "2026-09-22T22:45:00",
+      "waterLevelCm": 63.0
+    },
+    {
+      "measuredAt": "2026-09-22T23:00:00",
+      "waterLevelCm": 63.0
     }
   ],
   "source": {
