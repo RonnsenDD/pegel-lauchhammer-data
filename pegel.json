@@ -9,10 +9,6 @@
   "trend": "gleichbleibend",
   "history": [
     {
-      "measuredAt": "2026-09-24T17:45:00",
-      "waterLevelCm": 63.0
-    },
-    {
       "measuredAt": "2026-09-24T18:00:00",
       "waterLevelCm": 63.0
     },
