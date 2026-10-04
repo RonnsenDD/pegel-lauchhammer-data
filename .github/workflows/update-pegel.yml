@@ -3,7 +3,13 @@ name: Pegel Lauchhammer
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/15 * * * *"
+    # Bewusst nicht auf den Viertelstundenwechsel legen:
+    # GitHub weist darauf hin, dass Zeitpläne bei hoher Last
+    # verzögert oder verworfen werden können.
+    - cron: "7,22,37,52 * * * *"
+  push:
+    paths:
+      - ".github/workflows/update-pegel.yml"
 
 permissions:
   contents: write
@@ -41,12 +47,10 @@ jobs:
           from pathlib import Path
 
           csv_file = Path("pegel.csv")
-
           rows = []
 
           with csv_file.open("r", encoding="cp1252", newline="") as f:
               reader = csv.reader(f, delimiter=";")
-
               header = next(reader)
 
               for row in reader:
@@ -64,41 +68,27 @@ jobs:
                   except ValueError:
                       continue
 
-                  # -777 = Fehlwert laut LfU Brandenburg
                   if water_level == -777:
                       continue
 
                   try:
-                      dt = datetime.strptime(
-                          timestamp,
-                          "%d.%m.%Y %H:%M"
-                      )
+                      dt = datetime.strptime(timestamp, "%d.%m.%Y %H:%M")
                   except ValueError:
                       continue
 
                   rows.append({
                       "dt": dt,
-                      "measuredAt": dt.strftime(
-                          "%Y-%m-%dT%H:%M:%S"
-                      ),
+                      "measuredAt": dt.strftime("%Y-%m-%dT%H:%M:%S"),
                       "waterLevelCm": water_level
                   })
 
           if not rows:
-              raise RuntimeError(
-                  "Keine gültigen Pegeldaten gefunden."
-              )
+              raise RuntimeError("Keine gültigen Pegeldaten gefunden.")
 
           rows.sort(key=lambda x: x["dt"])
-
-          # Der 24-Stunden-Download sollte bereits nur
-          # den gewünschten Zeitraum enthalten.
           current = rows[-1]
-
-          # Letzte 24 Stunden inklusive aktuellem Messwert:
           history = rows[-97:]
 
-          # Tendenz aus den letzten beiden gültigen Messwerten
           if len(rows) >= 2:
               previous = rows[-2]["waterLevelCm"]
 
@@ -115,14 +105,11 @@ jobs:
               "station": "Lauchhammer",
               "stationNumber": "5530401",
               "river": "Schwarze Elster",
-
               "current": {
                   "waterLevelCm": current["waterLevelCm"],
                   "measuredAt": current["measuredAt"]
               },
-
               "trend": trend,
-
               "history": [
                   {
                       "measuredAt": item["measuredAt"],
@@ -130,30 +117,20 @@ jobs:
                   }
                   for item in history
               ],
-
               "source": {
                   "provider": "LfU Brandenburg",
                   "url": "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"
               },
-
               "status": "ok"
           }
 
           Path("pegel.json").write_text(
-              json.dumps(
-                  data,
-                  ensure_ascii=False,
-                  indent=2
-              ),
+              json.dumps(data, ensure_ascii=False, indent=2),
               encoding="utf-8"
           )
 
           print("===== Aktueller Pegel =====")
-          print(
-              current["measuredAt"],
-              current["waterLevelCm"],
-              "cm"
-          )
+          print(current["measuredAt"], current["waterLevelCm"], "cm")
 
       - name: Änderungen speichern
         run: |
