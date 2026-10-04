@@ -20,16 +20,68 @@ jobs:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
-      - name: 24-Stunden-Pegeldaten herunterladen
+      - name: Hochaufgelöste 24-Stunden-Pegeldaten herunterladen
+        shell: bash
         run: |
-          curl -L --fail --silent --show-error             -X POST             -H "Content-Type: application/x-www-form-urlencoded"             --data "smode=c&sdatum=stunde"             "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"             -o pegel.csv
+          set -euo pipefail
 
-          echo "===== Download geprüft ====="
-          file pegel.csv
-          echo "===== Erste Zeilen ====="
-          head -5 pegel.csv
-          echo "===== LETZTE ZEILEN ====="
-          tail -20 pegel.csv
+          URL="https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"
+
+          # Das LfU stellt die Zeitreihe in 15-Minuten-Auflösung bereit.
+          # Wir probieren die bekannten Bezeichner der Download-Auswahl
+          # und akzeptieren nur eine Antwort, die tatsächlich Werte
+          # mit Viertelstunden-Zeitstempeln enthält.
+          for INTERVALL in viertelstunde 15min 15 minute; do
+            echo "===== Teste Intervall: $INTERVALL ====="
+
+            curl -L --fail --silent --show-error               -X POST               -H "Content-Type: application/x-www-form-urlencoded"               --data "smode=c&sdatum=$INTERVALL"               "$URL"               -o "pegel-$INTERVALL.csv"
+
+            python3 - "$INTERVALL" <<'PY'
+          import csv
+          import sys
+          from pathlib import Path
+          from datetime import datetime
+
+          intervall = sys.argv[1]
+          path = Path(f"pegel-{intervall}.csv")
+          rows = []
+
+          try:
+              with path.open("r", encoding="cp1252", newline="") as f:
+                  reader = csv.reader(f, delimiter=";")
+                  next(reader, None)
+                  for row in reader:
+                      if len(row) < 2:
+                          continue
+                      timestamp = row[0].strip().strip('"')
+                      value = row[1].strip().strip('"')
+                      try:
+                          dt = datetime.strptime(timestamp, "%d.%m.%Y %H:%M")
+                          float(value)
+                      except (ValueError, TypeError):
+                          continue
+                      rows.append(dt)
+          except Exception:
+              rows = []
+
+          # Eine echte Viertelstundenreihe muss mindestens einen
+          # Zeitstempel mit Minute 15, 30 oder 45 enthalten.
+          viertel = [dt for dt in rows if dt.minute in (15, 30, 45)]
+
+          print(f"Gültige Datenzeilen: {len(rows)}")
+          print(f"Viertelstundenwerte: {len(viertel)}")
+
+          if len(viertel) >= 2:
+              Path("pegel.csv").write_bytes(path.read_bytes())
+              print(f"INTERVALL_OK={intervall}")
+              raise SystemExit(0)
+
+          raise SystemExit(1)
+          PY
+          done
+
+          echo "FEHLER: Es konnte keine 15-Minuten-Zeitreihe vom LfU geladen werden."
+          exit 1
 
       - name: Pegeldaten auswerten
         shell: python
@@ -42,44 +94,81 @@ jobs:
           rows = []
           with Path("pegel.csv").open("r", encoding="cp1252", newline="") as f:
               reader = csv.reader(f, delimiter=";")
-              next(reader)
+              next(reader, None)
               for row in reader:
                   if len(row) < 2:
                       continue
+
                   timestamp = row[0].strip().strip('"')
                   value = row[1].strip().strip('"')
+
                   if not timestamp or not value:
                       continue
+
                   try:
                       water_level = float(value)
                       dt = datetime.strptime(timestamp, "%d.%m.%Y %H:%M")
                   except ValueError:
                       continue
+
                   if water_level == -777:
                       continue
-                  rows.append({"dt": dt, "measuredAt": dt.strftime("%Y-%m-%dT%H:%M:%S"), "waterLevelCm": water_level})
+
+                  rows.append({
+                      "dt": dt,
+                      "measuredAt": dt.strftime("%Y-%m-%dT%H:%M:%S"),
+                      "waterLevelCm": water_level
+                  })
 
           if not rows:
               raise RuntimeError("Keine gültigen Pegeldaten gefunden.")
 
           rows.sort(key=lambda x: x["dt"])
+
           current = rows[-1]
-          previous = rows[-2]["waterLevelCm"] if len(rows) >= 2 else current["waterLevelCm"]
-          trend = "steigend" if current["waterLevelCm"] > previous else "fallend" if current["waterLevelCm"] < previous else "gleichbleibend"
+          previous = (
+              rows[-2]["waterLevelCm"]
+              if len(rows) >= 2
+              else current["waterLevelCm"]
+          )
+
+          trend = (
+              "steigend"
+              if current["waterLevelCm"] > previous
+              else "fallend"
+              if current["waterLevelCm"] < previous
+              else "gleichbleibend"
+          )
 
           data = {
               "station": "Lauchhammer",
               "stationNumber": "5530401",
               "river": "Schwarze Elster",
-              "current": {"waterLevelCm": current["waterLevelCm"], "measuredAt": current["measuredAt"]},
+              "current": {
+                  "waterLevelCm": current["waterLevelCm"],
+                  "measuredAt": current["measuredAt"]
+              },
               "retrievedAt": datetime.now(timezone.utc).isoformat(),
               "trend": trend,
-              "history": [{"measuredAt": x["measuredAt"], "waterLevelCm": x["waterLevelCm"]} for x in rows[-97:]],
-              "source": {"provider": "LfU Brandenburg", "url": "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"},
+              "history": [
+                  {
+                      "measuredAt": x["measuredAt"],
+                      "waterLevelCm": x["waterLevelCm"]
+                  }
+                  for x in rows[-97:]
+              ],
+              "source": {
+                  "provider": "LfU Brandenburg",
+                  "url": "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"
+              },
               "status": "ok"
           }
 
-          Path("pegel.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+          Path("pegel.json").write_text(
+              json.dumps(data, ensure_ascii=False, indent=2),
+              encoding="utf-8"
+          )
+
           print("===== Aktueller Pegel =====")
           print(current["measuredAt"], current["waterLevelCm"], "cm")
           print("===== Abrufzeit UTC =====")
@@ -94,5 +183,5 @@ jobs:
             echo "Keine Änderung."
             exit 0
           fi
-          git commit -m "Aktualisiere Pegeldaten"
+          git commit -m "Nutze 15-Minuten-Pegeldaten"
           git push
