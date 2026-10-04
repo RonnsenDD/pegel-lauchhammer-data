@@ -2,6 +2,9 @@ name: Probe Pegelparameter
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/probe-pegel.yml"
 
 permissions:
   contents: read
@@ -16,8 +19,7 @@ jobs:
           set -u
           URL="https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"
 
-          for SPEC in             "none:"             "stunde:stunde"             "tag:tag"             "viertel:viertel"             "viertelstunde:viertelstunde"             "15:15"             "15min:15min"             "minute:minute"             "1:1"             "24:24"             "24h:24h"; do
-
+          for SPEC in "none:" "stunde:stunde" "tag:tag" "viertel:viertel" "viertelstunde:viertelstunde" "15:15" "15min:15min" "minute:minute" "1:1" "24:24" "24h:24h"; do
             NAME="${SPEC%%:*}"
             VALUE="${SPEC#*:}"
 
@@ -25,9 +27,9 @@ jobs:
             echo "==================== ${NAME} / ${VALUE} ===================="
 
             if [ "${NAME}" = "none" ]; then
-              curl -L --fail --silent --show-error                 -X POST                 -H "Content-Type: application/x-www-form-urlencoded"                 --data "smode=c"                 "${URL}"                 -o "probe-${NAME}.dat"
+              curl -L --fail --silent --show-error -X POST                 -H "Content-Type: application/x-www-form-urlencoded"                 --data "smode=c" "${URL}" -o "probe-${NAME}.dat"
             else
-              curl -L --fail --silent --show-error                 -X POST                 -H "Content-Type: application/x-www-form-urlencoded"                 --data "smode=c&sdatum=${VALUE}"                 "${URL}"                 -o "probe-${NAME}.dat"
+              curl -L --fail --silent --show-error -X POST                 -H "Content-Type: application/x-www-form-urlencoded"                 --data "smode=c&sdatum=${VALUE}" "${URL}" -o "probe-${NAME}.dat"
             fi
 
             echo "--- file ---"
