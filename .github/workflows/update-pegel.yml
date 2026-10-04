@@ -3,9 +3,8 @@ name: Pegel Lauchhammer
 on:
   workflow_dispatch:
   schedule:
-    # Viertelstündlicher Abruf, bewusst nicht auf den Stundenwechsel gelegt.
-    # Die Zeitzone wird explizit gesetzt, damit Sommer-/Winterzeit korrekt ist.
-    - cron: "3,18,33,48 * * * *"
+    # Alle 15 Minuten. Start bei Minute 4, um den Stundenwechsel zu vermeiden.
+    - cron: "4,19,34,49 * * * *"
       timezone: "Europe/Berlin"
   push:
     paths:
@@ -17,19 +16,13 @@ permissions:
 jobs:
   update-pegel:
     runs-on: ubuntu-latest
-
     steps:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
       - name: 24-Stunden-Pegeldaten herunterladen
         run: |
-          curl -L --fail --silent --show-error \
-            -X POST \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            --data "smode=c&sdatum=stunde" \
-            "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph" \
-            -o pegel.csv
+          curl -L --fail --silent --show-error             -X POST             -H "Content-Type: application/x-www-form-urlencoded"             --data "smode=c&sdatum=stunde"             "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"             -o pegel.csv
 
           echo "===== Download geprüft ====="
           file pegel.csv
@@ -46,90 +39,47 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
 
-          csv_file = Path("pegel.csv")
           rows = []
-
-          with csv_file.open("r", encoding="cp1252", newline="") as f:
+          with Path("pegel.csv").open("r", encoding="cp1252", newline="") as f:
               reader = csv.reader(f, delimiter=";")
-              header = next(reader)
-
+              next(reader)
               for row in reader:
                   if len(row) < 2:
                       continue
-
                   timestamp = row[0].strip().strip('"')
                   value = row[1].strip().strip('"')
-
                   if not timestamp or not value:
                       continue
-
                   try:
                       water_level = float(value)
-                  except ValueError:
-                      continue
-
-                  if water_level == -777:
-                      continue
-
-                  try:
                       dt = datetime.strptime(timestamp, "%d.%m.%Y %H:%M")
                   except ValueError:
                       continue
-
-                  rows.append({
-                      "dt": dt,
-                      "measuredAt": dt.strftime("%Y-%m-%dT%H:%M:%S"),
-                      "waterLevelCm": water_level
-                  })
+                  if water_level == -777:
+                      continue
+                  rows.append({"dt": dt, "measuredAt": dt.strftime("%Y-%m-%dT%H:%M:%S"), "waterLevelCm": water_level})
 
           if not rows:
               raise RuntimeError("Keine gültigen Pegeldaten gefunden.")
 
           rows.sort(key=lambda x: x["dt"])
           current = rows[-1]
-          history = rows[-97:]
-
-          if len(rows) >= 2:
-              previous = rows[-2]["waterLevelCm"]
-
-              if current["waterLevelCm"] > previous:
-                  trend = "steigend"
-              elif current["waterLevelCm"] < previous:
-                  trend = "fallend"
-              else:
-                  trend = "gleichbleibend"
-          else:
-              trend = "unbekannt"
+          previous = rows[-2]["waterLevelCm"] if len(rows) >= 2 else current["waterLevelCm"]
+          trend = "steigend" if current["waterLevelCm"] > previous else "fallend" if current["waterLevelCm"] < previous else "gleichbleibend"
 
           data = {
               "station": "Lauchhammer",
               "stationNumber": "5530401",
               "river": "Schwarze Elster",
-              "current": {
-                  "waterLevelCm": current["waterLevelCm"],
-                  "measuredAt": current["measuredAt"]
-              },
+              "current": {"waterLevelCm": current["waterLevelCm"], "measuredAt": current["measuredAt"]},
               "retrievedAt": datetime.now(timezone.utc).isoformat(),
               "trend": trend,
-              "history": [
-                  {
-                      "measuredAt": item["measuredAt"],
-                      "waterLevelCm": item["waterLevelCm"]
-                  }
-                  for item in history
-              ],
-              "source": {
-                  "provider": "LfU Brandenburg",
-                  "url": "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"
-              },
+              "history": [{"measuredAt": x["measuredAt"], "waterLevelCm": x["waterLevelCm"]} for x in rows[-97:]],
+              "source": {"provider": "LfU Brandenburg", "url": "https://pegelportal.brandenburg.de/messstelle.php?fgid=7&pkz=5530401&thema=q_graph"},
               "status": "ok"
           }
 
-          Path("pegel.json").write_text(
-              json.dumps(data, ensure_ascii=False, indent=2),
-              encoding="utf-8"
-          )
-
+          Path("pegel.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
           print("===== Aktueller Pegel =====")
           print(current["measuredAt"], current["waterLevelCm"], "cm")
           print("===== Abrufzeit UTC =====")
@@ -139,13 +89,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add pegel.json
-
           if git diff --cached --quiet; then
             echo "Keine Änderung."
             exit 0
           fi
-
           git commit -m "Aktualisiere Pegeldaten"
           git push
