@@ -3,10 +3,10 @@ name: Pegel Lauchhammer
 on:
   workflow_dispatch:
   schedule:
-    # Bewusst nicht auf den Viertelstundenwechsel legen:
-    # GitHub weist darauf hin, dass Zeitpläne bei hoher Last
-    # verzögert oder verworfen werden können.
-    - cron: "7,22,37,52 * * * *"
+    # Viertelstündlicher Abruf, bewusst nicht auf den Stundenwechsel gelegt.
+    # Die Zeitzone wird explizit gesetzt, damit Sommer-/Winterzeit korrekt ist.
+    - cron: "3,18,33,48 * * * *"
+      timezone: "Europe/Berlin"
   push:
     paths:
       - ".github/workflows/update-pegel.yml"
@@ -43,7 +43,7 @@ jobs:
         run: |
           import csv
           import json
-          from datetime import datetime
+          from datetime import datetime, timezone
           from pathlib import Path
 
           csv_file = Path("pegel.csv")
@@ -109,6 +109,7 @@ jobs:
                   "waterLevelCm": current["waterLevelCm"],
                   "measuredAt": current["measuredAt"]
               },
+              "retrievedAt": datetime.now(timezone.utc).isoformat(),
               "trend": trend,
               "history": [
                   {
@@ -131,6 +132,8 @@ jobs:
 
           print("===== Aktueller Pegel =====")
           print(current["measuredAt"], current["waterLevelCm"], "cm")
+          print("===== Abrufzeit UTC =====")
+          print(data["retrievedAt"])
 
       - name: Änderungen speichern
         run: |
