@@ -4,19 +4,11 @@
   "river": "Schwarze Elster",
   "current": {
     "waterLevelCm": 60.0,
-    "measuredAt": "2026-10-10T11:00:00"
+    "measuredAt": "2026-10-10T12:00:00"
   },
-  "retrievedAt": "2026-10-10T10:59:18.063367+00:00",
+  "retrievedAt": "2026-10-10T11:20:41.407411+00:00",
   "trend": "gleichbleibend",
   "history": [
-    {
-      "measuredAt": "2026-10-09T12:00:00",
-      "waterLevelCm": 60.0
-    },
-    {
-      "measuredAt": "2026-10-09T12:15:00",
-      "waterLevelCm": 60.0
-    },
     {
       "measuredAt": "2026-10-09T12:30:00",
       "waterLevelCm": 60.0
@@ -379,6 +371,22 @@
     },
     {
       "measuredAt": "2026-10-10T11:00:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-10-10T11:15:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-10-10T11:30:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-10-10T11:45:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-10-10T12:00:00",
       "waterLevelCm": 60.0
     }
   ],
