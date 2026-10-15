@@ -6,17 +6,9 @@
     "waterLevelCm": 59.0,
     "measuredAt": "2026-10-15T00:00:00"
   },
-  "retrievedAt": "2026-10-14T23:44:11.679717+00:00",
+  "retrievedAt": "2026-10-15T00:06:18.886323+00:00",
   "trend": "gleichbleibend",
   "history": [
-    {
-      "measuredAt": "2026-10-14T00:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-10-14T01:00:00",
-      "waterLevelCm": 58.0
-    },
     {
       "measuredAt": "2026-10-14T01:15:00",
       "waterLevelCm": 58.0
