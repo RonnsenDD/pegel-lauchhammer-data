@@ -4,51 +4,11 @@
   "river": "Schwarze Elster",
   "current": {
     "waterLevelCm": 58.0,
-    "measuredAt": "2026-10-18T20:00:00"
+    "measuredAt": "2026-10-18T22:00:00"
   },
-  "retrievedAt": "2026-10-18T19:29:24.915661+00:00",
+  "retrievedAt": "2026-10-18T21:48:20.892969+00:00",
   "trend": "gleichbleibend",
   "history": [
-    {
-      "measuredAt": "2026-10-17T20:30:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T20:45:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T21:00:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T21:15:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T21:30:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T21:45:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T22:00:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T22:15:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T22:30:00",
-      "waterLevelCm": 59.0
-    },
-    {
-      "measuredAt": "2026-10-17T22:45:00",
-      "waterLevelCm": 59.0
-    },
     {
       "measuredAt": "2026-10-17T23:00:00",
       "waterLevelCm": 59.0
@@ -387,6 +347,38 @@
     },
     {
       "measuredAt": "2026-10-18T20:00:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T20:15:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T20:30:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T20:45:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T21:00:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T21:15:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T21:30:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T21:45:00",
+      "waterLevelCm": 58.0
+    },
+    {
+      "measuredAt": "2026-10-18T22:00:00",
       "waterLevelCm": 58.0
     }
   ],
