@@ -4,67 +4,11 @@
   "river": "Schwarze Elster",
   "current": {
     "waterLevelCm": 56.0,
-    "measuredAt": "2026-10-31T20:00:00"
+    "measuredAt": "2026-10-31T23:00:00"
   },
-  "retrievedAt": "2026-10-31T19:23:36.992791+00:00",
+  "retrievedAt": "2026-10-31T22:46:32.992397+00:00",
   "trend": "gleichbleibend",
   "history": [
-    {
-      "measuredAt": "2026-10-30T20:30:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T20:45:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T21:00:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T21:15:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T21:30:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T21:45:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T22:00:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T22:15:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T22:30:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T22:45:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T23:00:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T23:15:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T23:30:00",
-      "waterLevelCm": 55.0
-    },
-    {
-      "measuredAt": "2026-10-30T23:45:00",
-      "waterLevelCm": 55.0
-    },
     {
       "measuredAt": "2026-10-31T00:00:00",
       "waterLevelCm": 55.0
@@ -387,6 +331,54 @@
     },
     {
       "measuredAt": "2026-10-31T20:00:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T20:15:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T20:30:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T20:45:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T21:00:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T21:15:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T21:30:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T21:45:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T22:00:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T22:15:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T22:30:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T22:45:00",
+      "waterLevelCm": 56.0
+    },
+    {
+      "measuredAt": "2026-10-31T23:00:00",
       "waterLevelCm": 56.0
     }
   ],
