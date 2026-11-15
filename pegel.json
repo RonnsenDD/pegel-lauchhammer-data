@@ -3,140 +3,12 @@
   "stationNumber": "5530401",
   "river": "Schwarze Elster",
   "current": {
-    "waterLevelCm": 59.0,
-    "measuredAt": "2026-11-15T06:00:00"
+    "waterLevelCm": 60.0,
+    "measuredAt": "2026-11-15T14:00:00"
   },
-  "retrievedAt": "2026-11-15T06:14:22.997564+00:00",
+  "retrievedAt": "2026-11-15T14:06:17.320606+00:00",
   "trend": "gleichbleibend",
   "history": [
-    {
-      "measuredAt": "2026-11-14T07:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T07:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T07:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T08:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T08:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T08:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T08:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T09:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T09:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T09:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T09:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T10:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T10:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T10:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T10:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T11:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T11:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T11:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T11:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T12:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T12:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T12:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T12:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T13:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T13:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T13:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T13:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T14:00:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T14:15:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T14:30:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T14:45:00",
-      "waterLevelCm": 58.0
-    },
-    {
-      "measuredAt": "2026-11-14T15:00:00",
-      "waterLevelCm": 59.0
-    },
     {
       "measuredAt": "2026-11-14T15:15:00",
       "waterLevelCm": 59.0
@@ -376,6 +248,134 @@
     {
       "measuredAt": "2026-11-15T06:00:00",
       "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T06:15:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T06:30:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T06:45:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T07:00:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T07:15:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T07:30:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T07:45:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T08:00:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T08:15:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T08:30:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T08:45:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T09:00:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T09:15:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T09:30:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T09:45:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T10:00:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T10:15:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T10:30:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T10:45:00",
+      "waterLevelCm": 59.0
+    },
+    {
+      "measuredAt": "2026-11-15T11:00:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T11:15:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T11:30:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T11:45:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T12:00:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T12:15:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T12:30:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T12:45:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T13:00:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T13:15:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T13:30:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T13:45:00",
+      "waterLevelCm": 60.0
+    },
+    {
+      "measuredAt": "2026-11-15T14:00:00",
+      "waterLevelCm": 60.0
     }
   ],
   "source": {
